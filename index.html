@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Henri's Drag Race Simulator</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="introPanel">
+    <div class="intro-content">
+      <img src="logo.png" alt="RuPaul's Drag Race" class="intro-logo" />
+      <h1 class="intro-heading">Henri's Drag Race Simulator</h1>
+      <p class="intro-tagline">Step into the fantasy. Build your cast. Make herstory.</p>
+
+      <div class="intro-features">
+        <span>✨ Dynamic Challenges</span>
+        <span>👑 Iconic Queens</span>
+        <span>🏁 Custom Finales</span>
+      </div>
+
+      <button class="enter-button" onclick="closeIntro()">Enter Workroom</button>
+    </div>
+  </div>
+
+  <div id="scaleWrapper">
+
+    <h1 id="title">Henri's Drag Race Simulator</h1>
+    <p id="subtitle">THE ULTIMATE DRAG RACE EXPERIENCE</p>
+
+    <div class="format-grid">
+      <div class="finale-mode-selector">
+        <h3>Finale Format</h3>
+        <button class="finale-mode-btn" onclick="selectFinaleMode('top3')">👑 Top 3</button>
+        <button class="finale-mode-btn" onclick="selectFinaleMode('top4')">👑 Top 4</button>
+        <button class="finale-mode-btn" onclick="selectFinaleMode('smackdown')">🎤 Smackdown</button>
+      </div>
+
+      <div class="finale-mode-selector">
+        <h3>Season Format</h3>
+        <button id="btn-regular" class="finale-mode-btn selected" onclick="setSeasonFormat('regular')">🎬
+          REGULAR</button>
+        <button id="btn-allstars" class="finale-mode-btn" onclick="setSeasonFormat('allstars')">🌟 ALL STARS
+          <small>(LEGACY)</small></button>
+      </div>
+
+      <div class="finale-mode-selector">
+        <h3>Premiere Format</h3>
+        <button id="btn-normal" class="finale-mode-btn selected" onclick="setSeasonPremiere('regular')">🎭
+          REGULAR</button>
+        <button id="btn-slayers" class="finale-mode-btn" onclick="setSeasonPremiere('slayers')">💫 WINNER
+          WINNER</button>
+      </div>
+
+      <div class="finale-mode-selector">
+        <h3>Modifications</h3>
+        <button id="enableImmunityBtn" class="finale-mode-btn" onclick="toggleImmunity()">🛡️ Immunity: OFF</button>
+      </div>
+    </div>
+
+    <div class="queen-setup-panel">
+      <div class="top-controls">
+        <button id="importQueensBtn" onclick="openImportMenu()" class="skip-btn">📥 Import Queens</button>
+        <button id="createQueenBtn" onclick="openCreateQueenPanel()" class="skip-btn">💾 Create Queen</button>
+        <a href="https://discord.gg/sNfu7nuuUS" target="_blank" class="skip-btn">💬 Discord Server</a>
+      </div>
+
+      <form id="queenForm">
+        <h2 class="add-title">Add Your Queens <span id="queenCount">(0)</span></h2>
+        <input type="text" id="qName" placeholder="Queen Name" required />
+        <div class="stats-grid">
+          <div>
+            <h3>Performance</h3>
+            Acting <input type="number" min="1" max="15" id="act" />
+            Improv <input type="number" min="1" max="15" id="imp" />
+            Comedy <input type="number" min="1" max="15" id="com" />
+            Runway <input type="number" min="1" max="15" id="run" />
+            Dance <input type="number" min="1" max="15" id="dan" />
+            Lipsync <input type="number" min="1" max="15" id="lip" />
+            Songwriting <input type="number" min="1" max="15" id="song" />
+            Fashion <input type="number" min="1" max="15" id="fash" />
+          </div>
+          <div>
+            <h3>Personality</h3>
+            Charisma <input type="number" min="1" max="15" id="cha" />
+            Uniqueness <input type="number" min="1" max="15" id="uni" />
+            Nerve <input type="number" min="1" max="15" id="ner" />
+            Talent <input type="number" min="1" max="15" id="tal" />
+            Branding <input type="number" min="1" max="15" id="bra" />
+            Wit <input type="number" min="1" max="15" id="wit" />
+            Creativity <input type="number" min="1" max="15" id="cre" />
+            Versatility <input type="number" min="1" max="15" id="ver" />
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button type="submit">Add Queen</button>
+          <button type="button" onclick="randomizeQueen()">🎲 Randomize Queen</button>
+          <button type="button" onclick="randomImportQueen()">📦 Import Random Queen</button>
+        </div>
+
+        <div class="button-group">
+          <button type="button" onclick="startSeason()">Iniciate Season</button>
+          <button type="button" onclick="openRelationshipEditor()">🤝 Edit Relationships</button>
+        </div>
+      </form>
+
+      <div id="contestantsList" class="contestant-grid"></div>
+    </div>
+
+    <div id="simulator" style="display:none;">
+      <button id="simulateBtn" onclick="simulateEpisodeOrFinale()">Simulate Episode</button>
+      <div id="results"></div>
+      <div id="trackRecord"></div>
+      <div id="relationshipMatrix" style="margin-top: 20px;"></div>
+      <div id="lipstickDecisions" style="margin-top: 20px;"></div>
+      <div id="endSeasonBtn" style="display:none;">
+        <button onclick="resetSimulator()">🔁 Return to Main Screen</button>
+      </div>
+    </div>
+
+    <div id="importMenu" style="display:none;" class="import-panel">
+      <h2>Select Queens to Import</h2>
+      <input type="text" id="importSearchInput" placeholder="🔍 Search queens..." oninput="filterAllQueens()"
+        class="search-input" />
+      <!-- 🔍 Resultados dinâmicos da busca aparecerão aqui -->
+      <div id="searchResults" class="import-grid"></div>
+      <div id="seasonButtonsContainer" class="season-buttons"></div>
+      <div class="import-grid" id="importGrid">
+      </div>
+
+      <button class="skip-btn" onclick="closeImportMenu()">Close</button>
+    </div>
+
+    <div id="createQueenPanel" class="import-panel hidden">
+      <h2>Create a Custom Queen</h2>
+      <fieldset>
+        <legend>✨ Queen Name</legend>
+        <input type="text" id="newQueenName" placeholder="Queen Name" required />
+      </fieldset>
+      <div class="stats-grid">
+        <div>
+          <h3>Main Skills</h3>
+          <label>Acting:</label> <input type="number" id="newQueenAct" min="1" max="15" />
+          <label>Improv:</label> <input type="number" id="newQueenImp" min="1" max="15" />
+          <label>Comedy:</label> <input type="number" id="newQueenCom" min="1" max="15" />
+          <label>Runway:</label> <input type="number" id="newQueenRun" min="1" max="15" />
+          <label>Dance:</label> <input type="number" id="newQueenDan" min="1" max="15" />
+          <label>Lipsync:</label> <input type="number" id="newQueenLip" min="1" max="15" />
+          <label>Songwriting:</label> <input type="number" id="newQueenSong" min="1" max="15" />
+          <label>Fashion:</label> <input type="number" id="newQueenFash" min="1" max="15" />
+        </div>
+
+        <div>
+          <h3>Personality</h3>
+          <label>Charisma:</label> <input type="number" id="newQueenCha" min="1" max="15" />
+          <label>Uniqueness:</label> <input type="number" id="newQueenUni" min="1" max="15" />
+          <label>Nerve:</label> <input type="number" id="newQueenNer" min="1" max="15" />
+          <label>Talent:</label> <input type="number" id="newQueenTal" min="1" max="15" />
+          <label>Branding:</label> <input type="number" id="newQueenBra" min="1" max="15" />
+          <label>Wit:</label> <input type="number" id="newQueenWit" min="1" max="15" />
+          <label>Creativity:</label> <input type="number" id="newQueenCre" min="1" max="15" />
+          <label>Versatility:</label> <input type="number" id="newQueenVer" min="1" max="15" />
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button onclick="saveNewQueen()">✅ Save Queen</button>
+        <button onclick="document.getElementById('createQueenPanel').classList.add('hidden')">❌ Cancel</button>
+        <button onclick="deleteCustomQueen()">🗑️ Delete Queen</button>
+        <button onclick="randomizeQueenStats()">🎲 Randomize</button>
+      </div>
+    </div>
+
+    <div id="relationshipEditor" class="import-panel hidden">
+      <h2>Edit Relationships</h2>
+      <p>Choose a queen and define her relationships with others (0 to 100)</p>
+
+      <select id="queenSelector" onchange="renderRelationshipsFor(this.value)">
+        <option value="">Select a Queen</option>
+      </select>
+
+      <div id="relationshipEditMatrix" class="relationship-table"></div>
+
+      <div class="button-group">
+        <button class="skip-btn" onclick="saveRelationships()">✅ Save</button>
+        <button class="skip-btn" onclick="closeRelationshipEditor()">❌ Cancel</button>
+      </div>
+    </div>
+
+    <footer>
+      <p>✨ RPDR Simulator v0.9 — Fan-made project inspired by RuPaul's Drag Race.</p>
+      <p>Created with ❤️ for entertainment purposes only. No copyright infringement intended.</p>
+    </footer>
+
+    <script src="main.js" defer></script>
+</body>
+
+</html>
